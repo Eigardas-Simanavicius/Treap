@@ -70,6 +70,8 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         }
     }
 
+
+    //overrides the remove function
     @Override
     public V remove(K key) throws IOException {
         Position<Entry<K, V>> p = treeSearch(tree.root(), key);
@@ -80,7 +82,7 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         }
         //rotates the node down to the leaf positions
 
-
+        // continuesly rotates down the node , in a way that does not break heap order
         while (!tree.isExternal(tree.left(p)) || !tree.isExternal(tree.right(p))) {
             if (tree.numChildren(p) == 2 && !tree.isExternal(tree.left(p)) && !tree.isExternal(tree.right(p))) {
                 if (getPriority(tree.right(p).getElement()) > (getPriority(tree.left(p).getElement())) ) {
@@ -97,9 +99,10 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         // then removes it
         tree.remove(p);
 
-
         return old;
     }
+
+    // reblanaces an insert into heap order
     @Override
     protected void rebalanceInsert(Position<Entry<K, V>> p) {
         while (!tree.isRoot(p) && getPriority(p.getElement()) > (getPriority(tree.parent(p).getElement())) ) {
@@ -110,12 +113,12 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         }
     }
 
-
+    //returns an TreapEntries priority
     private  int getPriority(Entry<K, V> entry) {
         return ((TreapEntry<K,V>)entry).getPriority() ;
     }
 
-
+    // generates a random number
     private int prioBuilder() {
         return (int) (Math.random() * (10000+MaxSize));
     }

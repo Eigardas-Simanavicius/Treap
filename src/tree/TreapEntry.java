@@ -1,7 +1,7 @@
 package tree;
 
 import utils.MapEntry;
-
+// used by Treap , its just map entry but with an extra value, p wich is used for the priority
 public class TreapEntry<K extends Comparable<K>,V> extends MapEntry<K, V> {
     private K k; // key
     private V v; // value
