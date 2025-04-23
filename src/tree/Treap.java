@@ -2,6 +2,7 @@ package tree;
 
 import interfaces.Entry;
 import interfaces.Position;
+import utils.MapEntry;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -20,6 +21,7 @@ import java.util.Comparator;
 public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
 
     int MaxSize = 1;
+
     public Treap() {
         super();
         tree.addRoot(null);
@@ -43,7 +45,7 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         Integer[] keys = new Integer[]{22, 16, 49, 79, 41, 40, 93, 58, 68, 66};
 
         for (int i = 0; i < keys.length; i++) {
-            treap.put   (keys[i], keys[i]);
+            treap.put(keys[i], keys[i]);
         }
 
         System.out.println(treap.toBinaryTreeString());
@@ -85,7 +87,7 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
         // continuesly rotates down the node , in a way that does not break heap order
         while (!tree.isExternal(tree.left(p)) || !tree.isExternal(tree.right(p))) {
             if (tree.numChildren(p) == 2 && !tree.isExternal(tree.left(p)) && !tree.isExternal(tree.right(p))) {
-                if (getPriority(tree.right(p).getElement()) > (getPriority(tree.left(p).getElement())) ) {
+                if (getPriority(tree.right(p).getElement()) > (getPriority(tree.left(p).getElement()))) {
                     tree.rotate(tree.right(p));
                 } else {
                     tree.rotate(tree.left(p));
@@ -105,7 +107,7 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
     // reblanaces an insert into heap order
     @Override
     protected void rebalanceInsert(Position<Entry<K, V>> p) {
-        while (!tree.isRoot(p) && getPriority(p.getElement()) > (getPriority(tree.parent(p).getElement())) ) {
+        while (!tree.isRoot(p) && getPriority(p.getElement()) > (getPriority(tree.parent(p).getElement()))) {
             tree.rotate(p);
             if (tree.parent(p) == null) {
                 tree.setRoot(p);
@@ -114,15 +116,36 @@ public class Treap <K extends  Comparable<K>, V> extends TreeMap<K, V> {
     }
 
     //returns an TreapEntries priority
-    private  int getPriority(Entry<K, V> entry) {
-        return ((TreapEntry<K,V>)entry).getPriority() ;
+    private int getPriority(Entry<K, V> entry) {
+        return ((TreapEntry<K, V>) entry).getPriority();
     }
 
     // generates a random number
     private int prioBuilder() {
-        return (int) (Math.random() * (10000+MaxSize));
+        return (int) (Math.random() * (10000 + MaxSize));
     }
 
+
+    //nested TreapEntry class we use , only difference from map entry is that it has a p
+    protected static class TreapEntry<K extends Comparable<K>, V> extends MapEntry<K, V> {
+        private K k; // key
+        private V v; // value
+        private final int p;
+
+        public TreapEntry(K key, V value, int prio) {
+            super(key, value);
+            p = prio;
+        }
+
+        public int getPriority() {
+            return p;
+        }
+
+        public String toPrioString() {
+            return "<" + getKey() + ", " + getValue() + ", " + p + ">";
+        }
+
+    }
 }
 
 
